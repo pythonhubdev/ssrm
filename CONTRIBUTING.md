@@ -73,8 +73,8 @@ of [PEP 257](https://www.python.org/dev/peps/pep-0257/).
 
 If your change introduces any user-facing modifications, please:
 
-1. add or update docstrings
-2. update [release notes](#Release notes)
+1. Add or update docstrings.
+2. Update [release notes](#release-notes).
 
 **See also**
 
@@ -88,7 +88,7 @@ If your change introduces any user-facing modifications, please:
 ### Release notes
 
 Notes about user-facing modifications for all releases (including future releases)
-are kept in `RELEASE.md`.
+are kept in [RELEASE.md](/RELEASE.md).
 
 Release notes should be updated in pull-requests to help ensure the repository's
 history is as transactional as possible.

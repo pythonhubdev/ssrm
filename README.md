@@ -1,4 +1,4 @@
-![Build](https://github.com/optimizely/ssrm/workflows/Build/badge.svg?branch=master)
+![Build](https://github.com/optimizely/ssrm/workflows/Build/badge.svg)
 
 # Sequential Sample Ratio Mismatch (SRM) test.
 A package for sequential testing of Sample Ratio Mismatch (SRM).

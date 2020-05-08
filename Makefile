@@ -1,5 +1,6 @@
-SRC      ?= ssrm_test
-SHELL    ?= bash
+SRC   ?= ssrm_test
+SHELL ?= bash
+RUN   ?= poetry run
 
 NOTEBOOKS ?= $(wildcard notebooks/*.ipynb)
 
@@ -23,7 +24,7 @@ install: poetry ## installs dependencies for external users.
 
 install-dev: poetry ## installs dev dependencies for local development.
 	poetry install
-	pre-commit install
+	$(RUN) pre-commit install
 
 clean: clean-pyc  ## cleans all generated files.
 	-@rm -rf dist build out
@@ -43,21 +44,21 @@ clean-notebooks:
 .PHONY: autoflake black flake isort fmt fmt-notebooks release
 
 autoflake:
-	autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
+	$(RUN) autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
 
 black:
-	pre-commit run black --all-files
+	$(RUN) pre-commit run black --all-files
 
 flake:  ## runs code linter.
-	flake8
+	$(RUN) flake8
 
 isort:
-	pre-commit run isort --all-files
+	$(RUN) pre-commit run isort --all-files
 
 fmt: isort black flake  ## runs code auto-formatters (isort, black).
 
 fmt-notebooks:  ## runs notebook auto-formatters (black_nbconvert)
-	black_nbconvert $(NOTEBOOKS)
+	$(RUN) black_nbconvert $(NOTEBOOKS)
 
 release: clean  ## builds release artifacts into dist directory.
 	poetry build
@@ -70,7 +71,6 @@ lint: flake
 
 test: PYTEST_ARGS ?= --color=yes --cov-report term --cov=$(SRC)
 test: ## runs the unit tests.
-	pytest $(PYTEST_ARGS)
+	$(RUN) pytest $(PYTEST_ARGS)
 
 check: lint test  ## runs all checks.
-

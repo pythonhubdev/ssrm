@@ -3,7 +3,6 @@ A package for sequential testing of Sample Ratio Mismatch (SRM).
 
 Contributors:
 - Michael Lindon (michael.lindon@optimizely.com )
-- Alan Malek (alan.malek@optimizely.com)
 
 ## Installation
 We recommend that you use an isolated virtual environment to install and run the code in this repo (See: [virtualenv](https://pypi.org/project/virtualenv/) and [pyenv](https://github.com/pyenv/pyenv))

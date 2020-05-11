@@ -217,7 +217,7 @@ def srm_test(data: np.ndarray, null_probabilities: np.ndarray) -> float:
 
     Parameters
     ----------
-    data : List[tuple]
+    data : np.ndarray
         Data.
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.

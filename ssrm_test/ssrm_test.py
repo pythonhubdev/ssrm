@@ -109,7 +109,7 @@ def bayes_factor(posterior: dict) -> float:
     """
     Returns the Bayes Factor (BF) of an SRM.
     The BF can be np.Inf (numerically), which occurs when the data is
-    overwhelmingly in favour of a SRM, but that is not an issue and is
+    overwhelmingly in favour of an SRM, but that is not an issue and is
     handled correctly by other functions.
 
     Parameters
@@ -120,7 +120,7 @@ def bayes_factor(posterior: dict) -> float:
     Returns
     -------
     float
-        Bayes factor of a SRM.
+        Bayes factor of an SRM.
     """
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -155,23 +155,23 @@ def sequential_bayes_factors(
     concentration_parameter=10000,
 ) -> np.ndarray:
     """
-    Accumulates sequential Bayes factors after every datapoint
+    Accumulates sequential Bayes factors after every datapoint.
 
     Parameters
     ----------
     data : np.ndarray
-        Data i.e. [[0,1],[1,0],...] or [[10,12],[14,3],...]
+        Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3],...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter: float
-        How tightly the prior concentrates around the mean
+        How tightly the prior concentrates around the mean.
 
     Returns
     -------
     np.ndarray
-        sequential Bayes factors after every datapoint
+        Sequential Bayes factors after every datapoint.
     """
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_alpha, concentration_parameter
@@ -188,25 +188,25 @@ def sequential_posterior_probabilities(
     prior_odds=1,
 ) -> np.ndarray:
     """
-    Accumulates sequential posterior probabilities after every datapoint
+    Accumulates sequential posterior probabilities after every datapoint.
 
     Parameters
     ----------
     data : np.ndarray
-        Data i.e. [[0,1],[1,0],...] or [[10,12],[14,3],...]
+        Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3],...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter: float
-        How tightly the prior concentrates around the mean
+        How tightly the prior concentrates around the mean.
     prior_odds: float
-        Prior odds in favour of an SRM
+        Prior odds in favour of an SRM.
 
     Returns
     -------
     np.ndarray
-        sequential posterior probabilities after every datapoint
+        Sequential posterior probabilities after every datapoint.
     """
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_alpha, concentration_parameter
@@ -227,18 +227,18 @@ def sequential_p_values(
     Parameters
     ----------
     data : np.ndarray
-        Data i.e. [[0,1],[1,0],...] or [[10,12],[14,3],...]
+        Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3], ...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter : float
-        How tightly the prior concentrates around the mean
+        How tightly the prior concentrates around the mean.
 
     Returns
     -------
     np.ndarray
-        sequential p value after every datapoint
+        Sequential p value after every datapoint.
     """
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_alpha, concentration_parameter

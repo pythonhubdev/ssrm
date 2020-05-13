@@ -1,6 +1,8 @@
 SRC   ?= ssrm_test
 SHELL ?= bash
 RUN   ?= poetry run
+PYPI_USERNAME  ?= ''
+PYPI_API_TOKEN ?= ''
 
 NOTEBOOKS ?= $(wildcard notebooks/*.ipynb)
 
@@ -41,7 +43,7 @@ clean-notebooks:
 
 ## Build/Release ##############################################################
 
-.PHONY: autoflake black flake isort fmt fmt-notebooks release
+.PHONY: autoflake black flake isort fmt fmt-notebooks release publish
 
 autoflake:
 	$(RUN) autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
@@ -57,11 +59,14 @@ isort:
 
 fmt: isort black flake  ## runs code auto-formatters (isort, black).
 
-fmt-notebooks:  ## runs notebook auto-formatters (black_nbconvert)
+fmt-notebooks:  ## runs notebook auto-formatters (black_nbconvert).
 	$(RUN) black_nbconvert $(NOTEBOOKS)
 
 release: clean  ## builds release artifacts into dist directory.
 	poetry build
+
+publish: release ## publishes artifacts to PyPi.
+	@poetry publish --username $(PYPI_USERNAME) --password $(PYPI_API_TOKEN)
 
 ## Testing ####################################################################
 

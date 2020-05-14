@@ -1,8 +1,6 @@
 SRC   ?= ssrm_test
 SHELL ?= bash
 RUN   ?= poetry run
-PYPI_USERNAME  ?= ''
-PYPI_API_TOKEN ?= ''
 
 NOTEBOOKS ?= $(wildcard notebooks/*.ipynb)
 
@@ -43,7 +41,7 @@ clean-notebooks:
 
 ## Build/Release ##############################################################
 
-.PHONY: autoflake black flake isort fmt fmt-notebooks release publish
+.PHONY: autoflake black flake isort fmt fmt-notebooks release publish publish-test
 
 autoflake:
 	$(RUN) autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
@@ -66,7 +64,13 @@ release: clean  ## builds release artifacts into dist directory.
 	poetry build
 
 publish: release ## publishes artifacts to PyPi.
-	@poetry publish --username $(PYPI_USERNAME) --password $(PYPI_API_TOKEN)
+	@poetry config pypi-token.pypi ${PYPI_API_TOKEN}
+	poetry publish -n
+
+publish-test: release ## publishes artifacts to Test PyPi.
+	poetry config repositories.testpypi https://test.pypi.org/legacy
+	@poetry config pypi-token.pypi ${PYPI_TEST_API_TOKEN}
+	poetry publish --repository testpypi -n
 
 ## Testing ####################################################################
 

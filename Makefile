@@ -41,7 +41,7 @@ clean-notebooks:
 
 ## Build/Release ##############################################################
 
-.PHONY: autoflake black flake isort fmt fmt-notebooks release
+.PHONY: autoflake black flake isort fmt fmt-notebooks release publish publish-test
 
 autoflake:
 	$(RUN) autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
@@ -57,11 +57,20 @@ isort:
 
 fmt: isort black flake  ## runs code auto-formatters (isort, black).
 
-fmt-notebooks:  ## runs notebook auto-formatters (black_nbconvert)
+fmt-notebooks:  ## runs notebook auto-formatters (black_nbconvert).
 	$(RUN) black_nbconvert $(NOTEBOOKS)
 
 release: clean  ## builds release artifacts into dist directory.
 	poetry build
+
+publish: release ## publishes artifacts to PyPi.
+	@poetry config pypi-token.pypi ${PYPI_API_TOKEN}
+	poetry publish -n
+
+# For some reason, using poetry config pypi-token.pypi does not work for publishing to Test PyPi.
+publish-test: release ## publishes artifacts to Test PyPi.
+	poetry config repositories.testpypi https://test.pypi.org/legacy/
+	@poetry publish --repository testpypi -n -u ${PYPI_USERNAME} -p ${PYPI_TEST_API_TOKEN}
 
 ## Testing ####################################################################
 

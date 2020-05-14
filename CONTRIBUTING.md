@@ -1,10 +1,20 @@
-# Contributing
+# Contributing to the SSRM test.
+We welcome contributions and feedback! All contributors must sign our
+[Contributor License Agreement
+(CLA)](https://docs.google.com/a/optimizely.com/forms/d/e/1FAIpQLSf9cbouWptIpMgukAKZZOIAhafvjFCV8hS00XJLWQnWDFtwtA/viewform)
+to be eligible to contribute.
+Please read the instructions below to clone this repo and set up your
+development environment, then read the guidelines below on how to submit your
+code.
 
+## Clone the repo
 You can clone the repository from the command-line:
 
 ```console
 git clone git@github.com:optimizely/ssrm.git
 ```
+
+We highly recommend that you branch off of `master` and pull in upstream changes regularly.
 
 > **NOTE:** Feel free to use GUI-based git clients, like [GitHub Desktop](https://desktop.github.com/) or an IDE integration, but this documentation will only cover CLI-usage of git.
 
@@ -29,11 +39,19 @@ With the virtualenv active, start the Jupyter server with:
 
     jupyter lab
 
+## Submitting Pull Requests
+1. Ensure that there's an [issue](https://github.com/optimizely/ssrm/issues) created for your work.
+2. Clone the repo and branch `YOUR_NAME/branch_name` off master.
+3. Follow style guidelines below. Run `make fmt` to format.
+3. Make sure to add tests!
+4. Run `make clean check` to run lint and unit tests.
+5. `git push` your changes to GitHub.
+6. Open a pull request(PR) from `YOUR_NAME/branch_name` to `master`.
+7. Make sure that all unit tests are passing and that there are no merge conflicts between your branch and `master`.
+8. A repository maintainer will review your PR. If all goes well after the review cycle, the maintainers will squash and merge your PR.
 
 You should be all set!
 There's more helpful info below; so please read to the end.
-
-If you run into any issues along the way, please open an issue on the GitHub repo or reach out to team members directly.
 
 Happy coding!
 

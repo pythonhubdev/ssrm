@@ -28,3 +28,17 @@ The latest reference documentation is here (TBD).
 
 ## Contributing
 See the contributing doc [here](https://github.com/optimizely/ssrm/blob/master/CONTRIBUTING.md).
+
+### Credits
+First-party code (under `ssrm_test`) is copyright Optimizely, Inc. and contributors, licensed under Apache 2.0.
+
+### Additional Code
+This software incorporates code from the following open source projects:
+
+**numpy** [https://numpy.org/index.html](https://numpy.org/index.html)
+- Copyright © 2004-2017
+- License (BSD): https://numpy.org/license.html#license
+
+**scipy** [https://www.scipy.org/scipylib/index.html](https://www.scipy.org/scipylib/index.html)
+- Copyright © 2001-2002 Enthought, Inc.  2003-2019, SciPy Developers.
+- License (BSD): https://www.scipy.org/scipylib/license.html

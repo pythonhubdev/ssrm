@@ -67,10 +67,10 @@ publish: release ## publishes artifacts to PyPi.
 	@poetry config pypi-token.pypi ${PYPI_API_TOKEN}
 	poetry publish -n
 
+# For some reason, using poetry config pypi-token.pypi does not work for publishing to Test PyPi.
 publish-test: release ## publishes artifacts to Test PyPi.
-	poetry config repositories.testpypi https://test.pypi.org/legacy
-	@poetry config pypi-token.pypi ${PYPI_TEST_API_TOKEN}
-	poetry publish --repository testpypi -n
+	poetry config repositories.testpypi https://test.pypi.org/legacy/
+	@poetry publish --repository testpypi -n -u ${PYPI_USERNAME} -p ${PYPI_TEST_API_TOKEN}
 
 ## Testing ####################################################################
 

@@ -11,7 +11,7 @@ from .ssrm_test import (
     multinomiallogpmf,
     posterior_probability,
     sequential_posteriors,
-    srm_test
+    srm_test,
 )
 
 
@@ -22,14 +22,23 @@ def test_accumulator():
     computed in a batch manner.
     """
     theta = np.array([1 / 3, 1 / 3, 1 / 3])
-    alpha = np.array([1, 3, 2])
+    dirichlet_probability = np.array([1, 3, 2])
+    dirichlet_concentration = 1
+    dirichlet_alpha = dirichlet_probability * dirichlet_concentration
     sample_size = 40
     observations = multinomial.rvs(1, theta, size=sample_size)
     observations_sum = reduce(lambda x, y: x + y, observations)
-    final_posterior = sequential_posteriors(observations, theta, alpha)[-1]
+    final_posterior = sequential_posteriors(
+        observations,
+        theta,
+        dirichlet_probability=dirichlet_probability,
+        dirichlet_concentration=dirichlet_concentration,
+    )[-1]
     final_bf = bayes_factor(final_posterior)
     post_prob = posterior_probability(final_bf)
-    log_marginal_likelihood_M1 = log_posterior_predictive(observations_sum, alpha)
+    log_marginal_likelihood_M1 = log_posterior_predictive(
+        observations_sum, dirichlet_alpha
+    )
     log_marginal_likelihood_M0 = multinomial.logpmf(
         observations_sum, observations_sum.sum(), theta
     )
@@ -98,7 +107,12 @@ def test_sequential_posteriors():
     ]
     datapoints = np.array([[1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
     null_probabilities = np.array([0.4, 0.4, 0.2])
-    posteriors_dict = sequential_posteriors(datapoints, null_probabilities)
+    posteriors_dict = sequential_posteriors(
+        datapoints,
+        null_probabilities,
+        dirichlet_probability=np.array([1, 1, 1]),
+        dirichlet_concentration=1,
+    )
     assert len(posteriors_dict) == len(datapoints)
     for acc_dict, expected_acc_dict in zip(posteriors_dict, expected_posteriors_dict):
         assert acc_dict["log_marginal_likelihood_M1"] == approx(
@@ -113,7 +127,12 @@ def test_sequential_posteriors():
     # Testing time-aggregated data, where each entry represents an aggregate count across all variations for that time.
     datapoints = np.array([[20, 17, 9], [18, 21, 8], [4, 6, 4], [18, 19, 11]])
     null_probabilities = np.array([0.4, 0.4, 0.2])
-    posteriors_dict = sequential_posteriors(datapoints, null_probabilities)
+    posteriors_dict = sequential_posteriors(
+        datapoints,
+        null_probabilities,
+        dirichlet_probability=np.array([1, 1, 1]),
+        dirichlet_concentration=1,
+    )
     expected_posteriors_dict = [
         {
             "log_marginal_likelihood_M1": -7.028201432058012,

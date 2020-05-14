@@ -90,7 +90,7 @@ def posterior_probability(posterior_odds: float) -> float:
     Parameters
     ----------
     posterior_odds : float
-        posterior odds of an SRM.
+        Posterior odds of an SRM.
 
     Returns
     -------
@@ -163,6 +163,7 @@ def sequential_bayes_factors(
         Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3],...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
+        Note the order must match the order of data.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter: float
@@ -196,6 +197,7 @@ def sequential_posterior_probabilities(
         Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3],...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
+        Note the order must match the order of data.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter: float
@@ -222,7 +224,7 @@ def sequential_p_values(
     concentration_parameter=10000,
 ) -> np.ndarray:
     """
-    Accumulates sequential p values after every datapoint
+    Accumulates sequential p-values after every datapoint
 
     Parameters
     ----------
@@ -230,6 +232,7 @@ def sequential_p_values(
         Data i.e. [[0, 1], [1, 0], ...] or [[10, 12], [14, 3], ...]
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
+        Note the order must match the order of data.
     dirichlet_alpha : np.ndarray
         The mean of the dirichlet distribution, subject to elements summing to 1.
     concentration_parameter : float
@@ -238,7 +241,7 @@ def sequential_p_values(
     Returns
     -------
     np.ndarray
-        Sequential p value after every datapoint.
+        Sequential p-value after every datapoint.
     """
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_alpha, concentration_parameter
@@ -262,8 +265,11 @@ def sequential_posteriors(
         Data.
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
+        Note the order must match the order of data.
     dirichlet_alpha : float
         The parameter defining the dirichlet prior.
+    concentration_parameter : float
+        How tightly the prior concentrates around the mean.
 
     Returns
     -------
@@ -308,6 +314,7 @@ def srm_test(data: np.ndarray, null_probabilities: np.ndarray) -> float:
         Data.
     null_probabilities : np.ndarray
         The expected traffic allocation probability, where the values must sum to 1.
+        Note the order must match the order of data.
 
     Returns
     -------

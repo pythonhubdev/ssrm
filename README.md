@@ -19,7 +19,9 @@ We recommend that you use an isolated virtual environment to install and run the
 
 
 ## Tutorials
-We provide a tutorial notebook that walks through an example of running a Sequential SRM test here (TBD).
+We provide a tutorial notebook that walks through an example of running a
+Sequential SRM test
+[here](https://github.com/optimizely/ssrm/blob/master/notebooks/introduction.ipynb).  Run `jupyter lab`, and open `notebooks/introduction.ipynb`.
 
 ## Documentation
 The latest reference documentation is here (TBD).

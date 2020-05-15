@@ -1,6 +1,10 @@
 ![Build](https://github.com/optimizely/ssrm/workflows/Build/badge.svg)
 
-# Sequential Sample Ratio Mismatch (SRM) test.
+<p align="center">
+  <img src="logos/srm-blue.png">
+</p>
+
+# SSRM: A Sequential Sample Ratio Mismatch test.
 A package for sequential testing of Sample Ratio Mismatch (SRM).
 
 Contributors:

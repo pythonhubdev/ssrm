@@ -1,0 +1,53 @@
+# This workflow will install Python dependencies, run checks and publish artifacts to PyPi.
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Publish
+
+on:
+  push:
+    branches:
+        - 'STAT-339-gh-publish-workflow'
+    # tags:
+    #   - '*.*.*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        make install-dev
+    - name: Run checks
+      run: make check
+    - name: Build distribution packages for release
+      run: |
+        # Get the latest tag.
+        latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+        # Ensure we have this version set in pyproject.ml.
+        version=`poetry version | cut -d' ' -f 2`
+        if [ "$version" != "$latest_tag" ]
+        then
+            echo "Setting project version to $latest_tag"
+            poetry version "$latest_tag"
+        else
+            echo "Project version $version equals latest tag $latest_tag"
+        fi
+
+        make release
+
+        # Show built files in logs.
+        ls -lh dist/
+    # - name: Publish to Test PyPi
+    #   env:
+    #     PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+    #     PYPI_TEST_API_TOKEN: ${{ secrets.PYPI_TEST_API_TOKEN }}
+    #   run: make publish-test

@@ -1,7 +1,7 @@
 ![Build](https://github.com/optimizely/ssrm/workflows/Build/badge.svg)
 
 <p align="center">
-  <img src="logos/srm-blue.png">
+  <img src="/logos/srm-blue.png">
 </p>
 
 # SSRM: A Sequential Sample Ratio Mismatch test.

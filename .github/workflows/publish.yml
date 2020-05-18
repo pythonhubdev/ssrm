@@ -5,10 +5,8 @@ name: Publish
 
 on:
   push:
-    branches:
-        - 'STAT-339-gh-publish-workflow'
-    # tags:
-    #   - '*.*.*'
+    tags:
+      - '*.*.*'
 
 jobs:
   build:

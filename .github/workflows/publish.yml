@@ -9,7 +9,7 @@ on:
       - '*.*.*'
 
 jobs:
-  build:
+  publish:
 
     runs-on: ubuntu-latest
 
@@ -44,8 +44,8 @@ jobs:
 
         # Show built files in logs.
         ls -lh dist/
-    # - name: Publish to Test PyPi
-    #   env:
-    #     PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
-    #     PYPI_TEST_API_TOKEN: ${{ secrets.PYPI_TEST_API_TOKEN }}
-    #   run: make publish-test
+    - name: Publish to Test PyPi
+      env:
+        PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        PYPI_TEST_API_TOKEN: ${{ secrets.PYPI_TEST_API_TOKEN }}
+      run: make publish-test

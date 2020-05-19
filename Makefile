@@ -14,15 +14,18 @@ help:  ## displays available make targets
 
 ## Environment ################################################################
 
-.PHONY: poetry install install-dev clean clean-pyc clean-notebooks
+.PHONY: pip poetry install install-dev clean clean-pyc clean-notebooks
+
+pip:
+	python -m pip install --upgrade pip
 
 poetry:
 	pip install poetry
 
-install: poetry ## installs dependencies for external users.
+install: pip poetry ## installs dependencies for external users.
 	poetry install --no-dev
 
-install-dev: poetry ## installs dev dependencies for local development.
+install-dev: pip poetry ## installs dev dependencies for local development.
 	poetry install
 	$(RUN) pre-commit install
 

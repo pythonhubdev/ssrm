@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies and run a SourceClear scan for
 # vulnerabilities.
 
-name: Scan vulnz
+name: Vulnerability Scan
 
 # Run on PR to master
 on:
@@ -25,7 +25,7 @@ jobs:
 
         # Export requirements.txt; SourceClear uses it to scan dependencies.
         poetry export -f requirements.txt > requirements.txt
-    - name: Run SourceClear scan.
+    - name: Run SourceClear CI.
       env:
         SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
       run: curl -sSL https://download.sourceclear.com/ci.sh | bash

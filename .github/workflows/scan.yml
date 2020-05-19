@@ -1,0 +1,30 @@
+# This workflow will install Python dependencies and run a SourceClear scan for
+# vulnerabilities.
+
+name: Vulnerability Scan
+
+# Run on PR to master
+on:
+  pull_request:
+    branches:
+        - master
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        make install
+
+        # Export requirements.txt; SourceClear uses it to scan dependencies.
+        poetry export -f requirements.txt > requirements.txt
+    - name: Run SourceClear CI.
+      env:
+        SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+      run: curl -sSL https://download.sourceclear.com/ci.sh | bash

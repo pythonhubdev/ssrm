@@ -1,6 +1,6 @@
 ![Build](https://github.com/optimizely/ssrm/workflows/Build/badge.svg)
 
-# <img src="logos/ssrm-blue.png" alt="drawing" width="40"/> SSRM: A Sequential Sample Ratio Mismatch Test
+# <img src="logos/ssrm-blue.png" alt="" width="40"/> SSRM: A Sequential Sample Ratio Mismatch Test
 A package for sequential testing of Sample Ratio Mismatch (SRM).
 
 Contributors:
@@ -10,9 +10,8 @@ Contributors:
 We recommend that you use an isolated virtual environment to install and run the code in this repo (See: [virtualenv](https://pypi.org/project/virtualenv/) and [pyenv](https://github.com/pyenv/pyenv))
 
 1. Install dependencies: Run `make install`.
-    - If you wish to develop in the repo, run `make
-    install-dev`.  Also, see the contributing doc [here](https://github.com/optimizely/ssrm/blob/master/CONTRIBUTING.md)
-    > **Tip:** have a look in the [`Makefile`](https://github.com/optimizely/ssrm/blob/master/Makefile) to learn more about what this, and other make recipes do!
+    - If you wish to develop in the repo, run `make install-dev`.  Also, see the contributing doc [here](https://github.com/optimizely/ssrm/blob/master/CONTRIBUTING.md)
+    > **Tip:** have a look in the [Makefile](https://github.com/optimizely/ssrm/blob/master/Makefile) to learn more about what this, and other make recipes do!
 1. Run tests:
     -   `make check` to run all checks.
     -   `make test` to run unit tests.

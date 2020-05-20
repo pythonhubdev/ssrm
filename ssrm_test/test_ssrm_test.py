@@ -24,6 +24,7 @@ from .ssrm_test import (
     log_posterior_predictive,
     multinomiallogpmf,
     posterior_probability,
+    sequential_p_values,
     sequential_posteriors,
     srm_test,
 )
@@ -197,3 +198,14 @@ def test_srm_test():
     null_probabilities = np.array([0.4, 0.4, 0.2])
     mismatch_prob = srm_test(datapoints, null_probabilities)
     assert mismatch_prob >= 0 and mismatch_prob <= 1
+
+
+def test_p_values_decreasing_and_in_range():
+    p_0 = np.array([1 / 3, 1 / 3, 1 / 3])
+    p_1 = np.array([2 / 9, 4 / 9, 3 / 9])
+    sample_size = 40
+    data = multinomial.rvs(1, p_1, size=sample_size)
+    pvals = sequential_p_values(data, p_0)
+    for ix in range(1, sample_size):
+        assert pvals[ix] <= pvals[ix - 1]  # pvals should be non increasing
+        assert 0.0 <= pvals[ix] and pvals[ix] <= 1.0

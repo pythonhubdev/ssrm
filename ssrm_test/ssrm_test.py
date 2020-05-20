@@ -261,7 +261,7 @@ def sequential_p_values(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
     inverse_bayes_factors = 1 / bayes_factors
-    return np.minimum.accumulate(inverse_bayes_factors)
+    return list(accumulate(min, inverse_bayes_factors, 1))
 
 
 def sequential_posteriors(

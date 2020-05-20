@@ -208,4 +208,5 @@ def test_p_values_decreasing_and_in_range():
     pvals = sequential_p_values(data, p_0)
     for ix in range(1, sample_size):
         assert pvals[ix] <= pvals[ix - 1]  # pvals should be non increasing
-        assert 0.0 <= pvals[ix] and pvals[ix] <= 1.0
+    for pval in pvals:
+        assert 0.0 <= pval and pval <= 1.0

@@ -21,12 +21,14 @@ from scipy.stats import multinomial
 
 from .ssrm_test import (
     bayes_factor,
+    is_integer,
     log_posterior_predictive,
     multinomiallogpmf,
     posterior_probability,
     sequential_p_values,
     sequential_posteriors,
     srm_test,
+    validate_data,
 )
 
 
@@ -210,3 +212,17 @@ def test_p_values_decreasing_and_in_range():
         assert pvals[ix] <= pvals[ix - 1]  # pvals should be non increasing
     for pval in pvals:
         assert 0.0 <= pval and pval <= 1.0
+
+
+def test_is_integer():
+    assert is_integer(4.0)
+    assert is_integer(4)
+    assert is_integer(4.5) == False
+    assert is_integer("hello") == False
+
+
+def test_data_validator():
+    assert validate_data(np.array([[1.0, 3.0], [4.0, 3.0]]))
+    assert validate_data(np.array([[1, 3], [4, 3]]))
+    assert validate_data(np.array([[1, 3], [4, 3.5]])) == False
+    assert validate_data(np.array([[1, 3], [4, "hello"]])) == False

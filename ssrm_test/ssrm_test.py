@@ -188,6 +188,9 @@ def sequential_bayes_factors(
     np.ndarray
         Sequential Bayes factors after every datapoint.
     """
+    data = np.array(data)
+    if not validate_data(data):
+        raise TypeError("Data is supposed to be an array of integer arrays")
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
@@ -224,6 +227,9 @@ def sequential_posterior_probabilities(
     np.ndarray
         Sequential posterior probabilities after every datapoint.
     """
+    data = np.array(data)
+    if not validate_data(data):
+        raise TypeError("Data is supposed to be an array of integer arrays")
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
@@ -257,6 +263,9 @@ def sequential_p_values(
     np.ndarray
         Sequential p-value after every datapoint.
     """
+    data = np.array(data)
+    if not validate_data(data):
+        raise TypeError("Data is supposed to be an array of integer arrays")
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
@@ -303,6 +312,9 @@ def sequential_posteriors(
     >>> null_probabilities = [0.4, 0.4, 0.2]
     >>> list_dict = sequential_posteriors(data, null_probabilities)
     """
+    data = np.array(data)
+    if not validate_data(data):
+        raise TypeError("Data is supposed to be an array of integer arrays")
     null_probabilities = np.array(null_probabilities)
     if dirichlet_probability is None:
         dirichlet_probability = null_probabilities
@@ -348,6 +360,7 @@ def srm_test(data: np.ndarray, null_probabilities: np.ndarray) -> float:
     >>> null_probabilities = [0.4, 0.4, 0.2]
     >>> prob = srm_test(data, null_probabilities)
     """
+    data = np.array(data)
     final_posterior = sequential_posteriors(data, null_probabilities)[-1]
     final_bf = bayes_factor(final_posterior)
     post_prob = posterior_probability(final_bf)
@@ -406,3 +419,17 @@ def multinomiallogpmf(x: List[int], n: int, p: List[float]):
     x = np.array(x)
     p = np.array(p)
     return gammaln(n + 1) + np.sum(xlogy(x, p) - gammaln(x + 1), axis=-1)
+
+
+@np.vectorize
+def is_integer(x):
+    if isinstance(x, int):
+        return True
+    elif isinstance(x, float):
+        return x.is_integer()
+    else:
+        return False
+
+
+def validate_data(data: np.array) -> bool:
+    return np.all(is_integer(data.flatten()))

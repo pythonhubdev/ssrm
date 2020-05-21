@@ -1,6 +1,7 @@
 SRC   ?= ssrm_test
 SHELL ?= bash
 RUN   ?= poetry run
+DOCS  ?= docs
 
 NOTEBOOKS ?= $(wildcard notebooks/*.ipynb)
 
@@ -44,13 +45,18 @@ clean-notebooks:
 
 ## Build/Release ##############################################################
 
-.PHONY: autoflake black flake isort fmt fmt-notebooks release publish publish-test
+.PHONY: autoflake black docs flake isort fmt fmt-notebooks release publish publish-test
 
 autoflake:
 	$(RUN) autoflake --recursive --in-place --remove-all-unused-imports --remove-duplicate-keys $(SRC)
 
 black:
 	$(RUN) pre-commit run black --all-files
+
+docs:  ## builds docs.
+	$(MAKE) -C $(DOCS) clean html
+	# Copy logo image to fix Sphinx not groking relative paths in the README.
+	@mkdir -p $(DOCS)/build/html/logos && cp logos/*.png $(DOCS)/build/html/logos
 
 flake:  ## runs code linter.
 	$(RUN) flake8

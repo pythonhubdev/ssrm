@@ -189,7 +189,7 @@ def sequential_bayes_factors(
         Sequential Bayes factors after every datapoint.
     """
     data = np.array(data)
-    if not validate_data(data):
+    if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
@@ -228,7 +228,7 @@ def sequential_posterior_probabilities(
         Sequential posterior probabilities after every datapoint.
     """
     data = np.array(data)
-    if not validate_data(data):
+    if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
@@ -264,7 +264,7 @@ def sequential_p_values(
         Sequential p-value after every datapoint.
     """
     data = np.array(data)
-    if not validate_data(data):
+    if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
     bayes_factors = sequential_bayes_factors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
@@ -313,7 +313,7 @@ def sequential_posteriors(
     >>> list_dict = sequential_posteriors(data, null_probabilities)
     """
     data = np.array(data)
-    if not validate_data(data):
+    if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
     null_probabilities = np.array(null_probabilities)
     if dirichlet_probability is None:
@@ -422,7 +422,7 @@ def multinomiallogpmf(x: List[int], n: int, p: List[float]):
 
 
 @np.vectorize
-def is_integer(x):
+def _is_integer(x):
     if isinstance(x, int):
         return True
     elif isinstance(x, float):
@@ -431,5 +431,5 @@ def is_integer(x):
         return False
 
 
-def validate_data(data: np.array) -> bool:
-    return np.all(is_integer(data.flatten()))
+def _validate_data(data: np.array) -> bool:
+    return np.all(_is_integer(data.flatten()))

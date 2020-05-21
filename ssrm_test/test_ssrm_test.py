@@ -20,6 +20,8 @@ from pytest import approx
 from scipy.stats import multinomial
 
 from .ssrm_test import (
+    _is_integer,
+    _validate_data,
     bayes_factor,
     log_posterior_predictive,
     multinomiallogpmf,
@@ -210,3 +212,17 @@ def test_p_values_decreasing_and_in_range():
         assert pvals[ix] <= pvals[ix - 1]  # pvals should be non increasing
     for pval in pvals:
         assert 0.0 <= pval and pval <= 1.0
+
+
+def test_is_integer():
+    assert _is_integer(4.0)
+    assert _is_integer(4)
+    assert not _is_integer(4.5)
+    assert not _is_integer("hello")
+
+
+def test_data_validator():
+    assert _validate_data(np.array([[1.0, 3.0], [4.0, 3.0]]))
+    assert _validate_data(np.array([[1, 3], [4, 3]]))
+    assert not _validate_data(np.array([[1, 3], [4, 3.5]]))
+    assert not _validate_data(np.array([[1, 3], [4, "hello"]]))

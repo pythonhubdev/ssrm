@@ -36,6 +36,13 @@ jobs:
         then
             echo "Setting project version to $latest_tag"
             poetry version "$latest_tag"
+
+            # Commit and push.
+            echo "Commiting and pushing changes to pyproject.ml"
+            git config --global user.name 'DataLab SSRM'
+            git config --global user.email 'datalab-feedback@optimizely.com'
+            git commit -am "[SSRM] Updating poetry version in publish workflow."
+            git push
         else
             echo "Project version $version equals latest tag $latest_tag"
         fi

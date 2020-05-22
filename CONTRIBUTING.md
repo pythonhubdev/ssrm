@@ -3,18 +3,18 @@ We welcome contributions and feedback! All contributors must sign our
 [Contributor License Agreement
 (CLA)](https://docs.google.com/a/optimizely.com/forms/d/e/1FAIpQLSf9cbouWptIpMgukAKZZOIAhafvjFCV8hS00XJLWQnWDFtwtA/viewform)
 to be eligible to contribute.
-Please read the instructions below to clone this repo and set up your
+Please read the general instructions below to clone this repo and set up your
 development environment, then read the guidelines below on how to submit your
 code.
 
-## Clone the repo
+## Cloning the repo
 You can clone the repository from the command-line:
 
 ```console
 git clone git@github.com:optimizely/ssrm.git
 ```
 
-We highly recommend that you branch off of `master` and pull in upstream changes regularly.
+However, if you wish to propose changes to this repo you will need to create your own fork of this repo, clone the fork, and make changes in a branch of the clone. See instructions for submitting pull requests below.
 
 > **NOTE:** Feel free to use GUI-based git clients, like [GitHub Desktop](https://desktop.github.com/) or an IDE integration, but this documentation will only cover CLI-usage of git.
 
@@ -41,14 +41,15 @@ With the virtualenv active, start the Jupyter server with:
 
 ## Submitting Pull Requests
 1. Ensure that there's an [issue](https://github.com/optimizely/ssrm/issues) created for your work.
-2. Clone the repo and branch `YOUR_NAME/branch_name` off master.
-3. Follow style guidelines below. Run `make fmt` to format.
-3. Make sure to add tests!
-4. Run `make clean check` to run lint and unit tests.
-5. `git push` your changes to GitHub.
-6. Open a pull request(PR) from `YOUR_NAME/branch_name` to `master`.
-7. Make sure that all unit tests are passing and that there are no merge conflicts between your branch and `master`.
-8. A repository maintainer will review your PR. If all goes well after the review cycle, the maintainers will squash and merge your PR.
+1. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the repository.
+1. Clone the forked repo and branch `YOUR_NAME/branch_name` off master.
+1. Follow style guidelines below. Run `make fmt` to format.
+1. Make sure to add tests!
+1. Run `make clean check` to run lint and unit tests.
+1. `git push` your changes to GitHub.
+1. Open a pull request(PR) from `YOUR_NAME/branch_name` into `master` of the original repo.
+1. Make sure that all unit tests are passing and that there are no merge conflicts between your branch and `master`.
+1. A repository maintainer will review your PR. If all goes well after the review cycle, the maintainers will squash and merge your PR.
 
 You should be all set!
 There's more helpful info below; so please read to the end.
@@ -119,4 +120,4 @@ and writing style.
 - [keepachangelog format](https://keepachangelog.com)
 
 ### Building the documentation
- TBD
+We use Sphinx to build the docs. Run `make docs` to build the docs. The docs can be found in `docs/build/html`.

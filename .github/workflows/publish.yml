@@ -20,9 +20,7 @@ jobs:
       with:
         python-version: 3.7
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        make install-dev
+      run: make install-dev
     - name: Run checks
       run: make check
     - name: Build distribution packages for release
@@ -41,7 +39,7 @@ jobs:
             echo "Commiting and pushing changes to pyproject.toml"
             git config --global user.name 'DataLab SSRM'
             git config --global user.email 'datalab-feedback@optimizely.com'
-            git commit -am "[SSRM] Updating poetry version in publish workflow."
+            git commit -am "[SSRM] Updating project's poetry version in publish workflow."
             git push
         else
             echo "Project version $version equals latest tag $latest_tag"

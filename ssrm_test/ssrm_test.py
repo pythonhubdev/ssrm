@@ -96,6 +96,7 @@ def accumulator(acc: dict, new_data_point: np.ndarray) -> dict:
     post_prob = posterior_probability(bayes_factor)
     p_value = min(1 / bayes_factor, acc["p_value"])
     out = {
+        "log_bayes_factor": log_bayes_factor,
         "bayes_factor": bayes_factor,
         "p_value": p_value,
         "log_marginal_likelihood_M1": log_marginal_likelihood_M1,

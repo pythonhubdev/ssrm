@@ -83,11 +83,23 @@ def accumulator(acc: dict, new_data_point: np.ndarray) -> dict:
     dict
         A dictionary storing accumulated values with the same keys as in acc.
     """
+    log_marginal_likelihood_M1 = acc[
+        "log_marginal_likelihood_M1"
+    ] + log_posterior_predictive(new_data_point, acc["posterior_M1"])
+    log_marginal_likelihood_M0 = acc["log_marginal_likelihood_M0"] + multinomiallogpmf(
+        new_data_point, new_data_point.sum(), acc["posterior_M0"]
+    )
+    log_bayes_factor = log_marginal_likelihood_M1 - log_marginal_likelihood_M0
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        bayes_factor = np.exp(log_bayes_factor)
+    post_prob = posterior_probability(bayes_factor)
+    p_value = min(1 / bayes_factor, acc["p_value"])
     out = {
-        "log_marginal_likelihood_M1": acc["log_marginal_likelihood_M1"]
-        + log_posterior_predictive(new_data_point, acc["posterior_M1"]),
-        "log_marginal_likelihood_M0": acc["log_marginal_likelihood_M0"]
-        + multinomiallogpmf(new_data_point, new_data_point.sum(), acc["posterior_M0"])
+        "bayes_factor": bayes_factor,
+        "p_value": p_value,
+        "log_marginal_likelihood_M1": log_marginal_likelihood_M1,
+        "log_marginal_likelihood_M0": log_marginal_likelihood_M0
         if new_data_point.sum() > 0
         else acc["log_marginal_likelihood_M0"],
         "posterior_M1": acc["posterior_M1"] + new_data_point,
@@ -320,6 +332,9 @@ def sequential_posteriors(
         dirichlet_probability = null_probabilities
     dirichlet_alpha = dirichlet_probability * dirichlet_concentration
     acc = {
+        "log_bayes_factor": 0,
+        "bayes_factor": 1,
+        "p_value": 1,
         "log_marginal_likelihood_M1": 0,
         "log_marginal_likelihood_M0": 0,
         "posterior_M1": dirichlet_alpha,

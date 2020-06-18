@@ -335,6 +335,7 @@ def sequential_posteriors(
         "log_bayes_factor": 0,
         "bayes_factor": 1,
         "p_value": 1,
+        "posterior_probability": 0.5,
         "log_marginal_likelihood_M1": 0,
         "log_marginal_likelihood_M0": 0,
         "posterior_M1": dirichlet_alpha,

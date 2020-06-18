@@ -159,7 +159,9 @@ def total_n(posterior: dict) -> float:
     float
         Total number of datapoints in the posterior.
     """
-    return np.sum(posterior["posterior_M1"] - posterior["posterior_M0"])
+    posterior_M1 = np.array(posterior["posterior_M1"])
+    posterior_M0 = np.array(posterior["posterior_M0"])
+    return np.sum(posterior_M1 - posterior_M0)
 
 
 def sequential_bayes_factors(

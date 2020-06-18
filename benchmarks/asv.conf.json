@@ -11,12 +11,12 @@
 
     // The URL or local path of the source code repository for the
     // project being benchmarked
-    "repo": "..",
+    "repo": "git@github.com:optimizely/ssrm.git",
 
     // The Python project's subdirectory in your repo.  If missing or
     // the empty string, the project is assumed to be located at the root
     // of the repository.
-    "repo_subdir": ".",
+    "repo_subdir": "..",
 
     // Customizable commands for building, installing, and
     // uninstalling the project. See asv.conf.json documentation.
@@ -25,6 +25,7 @@
     // "uninstall_command": ["return-code=any python -mpip uninstall -y {project}"],
     "build_command": [
         "pip install poetry",
+        "pip install ssrm-test",
         "poetry build"
     ],
 
@@ -112,7 +113,7 @@
 
     // The directory (relative to the current directory) that benchmarks are
     // stored in.  If not provided, defaults to "benchmarks"
-    // "benchmark_dir": "benchmarks",
+    "benchmark_dir": "benchmarks",
 
     // The directory (relative to the current directory) to cache the Python
     // environments in.  If not provided, defaults to "env"
@@ -127,7 +128,7 @@
     "html_dir": ".asv/html",
 
     // The number of characters to retain in the commit hashes.
-    // "hash_length": 8,
+    "hash_length": 8,
 
     // `asv` will cache results of the recent builds in each
     // environment, making them faster to install next time.  This is

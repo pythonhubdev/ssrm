@@ -83,19 +83,24 @@ def accumulator(acc: dict, new_data_point: np.ndarray) -> dict:
     dict
         A dictionary storing accumulated values with the same keys as in acc.
     """
-    log_marginal_likelihood_M1 = acc[
-        "log_marginal_likelihood_M1"
-    ] + log_posterior_predictive(new_data_point, acc["posterior_M1"])
-    log_marginal_likelihood_M0 = acc["log_marginal_likelihood_M0"] + multinomiallogpmf(
+    log_density_M1 = log_posterior_predictive(new_data_point, acc["posterior_M1"])
+    log_density_M0 = multinomiallogpmf(
         new_data_point, new_data_point.sum(), acc["posterior_M0"]
     )
+    log_marginal_likelihood_M1 = acc["log_marginal_likelihood_M1"] + log_density_M1
+    log_marginal_likelihood_M0 = acc["log_marginal_likelihood_M0"] + log_density_M0
     log_bayes_factor = log_marginal_likelihood_M1 - log_marginal_likelihood_M0
+
+    log_posterior_odds = acc["log_posterior_odds"] + log_density_M1 - log_density_M0
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         bayes_factor = np.exp(log_bayes_factor)
-    post_prob = posterior_probability(bayes_factor)
+        posterior_odds = np.exp(log_posterior_odds)
+    post_prob = posterior_probability(posterior_odds)
     p_value = min(1 / bayes_factor, acc["p_value"])
     out = {
+        "log_posterior_odds": log_posterior_odds,
+        "posterior_odds": posterior_odds,
         "log_bayes_factor": log_bayes_factor,
         "bayes_factor": bayes_factor,
         "p_value": p_value,
@@ -244,7 +249,11 @@ def sequential_posterior_probabilities(
     if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
     posteriors = sequential_posteriors(
-        data, null_probabilities, dirichlet_probability, dirichlet_concentration
+        data,
+        null_probabilities,
+        dirichlet_probability,
+        dirichlet_concentration,
+        prior_odds,
     )
     return [posterior["posterior_probability"] for posterior in posteriors]
 
@@ -289,6 +298,7 @@ def sequential_posteriors(
     null_probabilities: np.ndarray,
     dirichlet_probability=None,
     dirichlet_concentration=10000,
+    prior_odds=1,
 ) -> List[dict]:
     """
     Accumulates the posteriors and marginal likelihoods for each datapoint.
@@ -331,10 +341,12 @@ def sequential_posteriors(
         dirichlet_probability = null_probabilities
     dirichlet_alpha = dirichlet_probability * dirichlet_concentration
     acc = {
+        "log_posterior_odds": np.log(prior_odds),
+        "posterior_odds": prior_odds,
         "log_bayes_factor": 0,
         "bayes_factor": 1,
         "p_value": 1,
-        "posterior_probability": 0.5,
+        "posterior_probability": posterior_probability(prior_odds),
         "log_marginal_likelihood_M1": 0,
         "log_marginal_likelihood_M0": 0,
         "posterior_M1": dirichlet_alpha,

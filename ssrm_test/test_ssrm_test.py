@@ -244,6 +244,10 @@ def test_regression():
     pvals = sequential_p_values(data, p_0)
     post_probs = sequential_posterior_probabilities(data, p_0)
     bfs = sequential_bayes_factors(data, p_0)
+    assert (post_probs[-1] / (1 - post_probs[-1])) == approx(bfs[-1])
     assert pvals[-1] == approx(0.9980534145723241)
     assert post_probs[-1] == approx(0.5004370206949569)
     assert bfs[-1] == approx(1.0017496120131435)
+
+    post_probs = sequential_posterior_probabilities(data, p_0, prior_odds=0.1)
+    assert (post_probs[-1] / (1 - post_probs[-1])) != approx(bfs[-1])

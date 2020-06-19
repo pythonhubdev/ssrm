@@ -99,6 +99,7 @@ def accumulator(acc: dict, new_data_point: np.ndarray) -> dict:
         "log_bayes_factor": log_bayes_factor,
         "bayes_factor": bayes_factor,
         "p_value": p_value,
+        "posterior_probability": post_prob,
         "log_marginal_likelihood_M1": log_marginal_likelihood_M1,
         "log_marginal_likelihood_M0": log_marginal_likelihood_M0
         if new_data_point.sum() > 0
@@ -207,8 +208,7 @@ def sequential_bayes_factors(
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
-    bayes_factors = np.array([bayes_factor(posterior) for posterior in posteriors])
-    return bayes_factors
+    return [posterior["bayes_factor"] for posterior in posteriors]
 
 
 def sequential_posterior_probabilities(
@@ -243,11 +243,10 @@ def sequential_posterior_probabilities(
     data = np.array(data)
     if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
-    bayes_factors = sequential_bayes_factors(
+    posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
-    posterior_odds = bayes_factors * prior_odds
-    return posterior_probability(posterior_odds)
+    return [posterior["posterior_probability"] for posterior in posteriors]
 
 
 def sequential_p_values(
@@ -279,11 +278,10 @@ def sequential_p_values(
     data = np.array(data)
     if not _validate_data(data):
         raise TypeError("Data is supposed to be an array of integer arrays")
-    bayes_factors = sequential_bayes_factors(
+    posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
-    inverse_bayes_factors = 1 / bayes_factors
-    return list(accumulate(min, inverse_bayes_factors, 1))
+    return [posterior["p_value"] for posterior in posteriors]
 
 
 def sequential_posteriors(

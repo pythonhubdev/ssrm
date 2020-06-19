@@ -26,7 +26,9 @@ from .ssrm_test import (
     log_posterior_predictive,
     multinomiallogpmf,
     posterior_probability,
+    sequential_bayes_factors,
     sequential_p_values,
+    sequential_posterior_probabilities,
     sequential_posteriors,
     srm_test,
 )
@@ -226,3 +228,22 @@ def test_data_validator():
     assert _validate_data(np.array([[1, 3], [4, 3]]))
     assert not _validate_data(np.array([[1, 3], [4, 3.5]]))
     assert not _validate_data(np.array([[1, 3], [4, "hello"]]))
+
+
+def test_regression():
+    # Set the seed of our random number generator for reproducibility. Don't worry about this
+    np.random.seed(0)
+    # Our intended allocation probabilities
+    p_0 = [0.1, 0.5, 0.4]
+    # The actual allocation probabilities
+    p = [0.1, 0.49, 0.41]
+    # Specify number of visitors
+    n = 10
+    # Generate allocations
+    data = multinomial.rvs(1, p, size=n)
+    pvals = sequential_p_values(data, p_0)
+    post_probs = sequential_posterior_probabilities(data, p_0)
+    bfs = sequential_bayes_factors(data, p_0)
+    assert pvals[-1] == approx(0.9980534145723241)
+    assert post_probs[-1] == approx(0.5004370206949569)
+    assert bfs[-1] == approx(1.0017496120131435)

@@ -19,6 +19,7 @@ import numpy as np
 from pytest import approx
 from scipy.stats import multinomial
 
+from .constants import Constants
 from .ssrm_test import (
     _is_integer,
     _validate_data,
@@ -68,10 +69,10 @@ def test_accumulator():
 
 def test_overflow():
     posterior = {
-        "log_marginal_likelihood_M1": -23.585991739528254,
-        "log_marginal_likelihood_M0": -76546.65811250894,
-        "posterior_M1": [88519.5, 12540.25, 13002.25],
-        "posterior_M0": [0.75, 0.125, 0.125],
+        Constants.LOG_MARGINAL_LIKELIHOOD_M1: -23.585991739528254,
+        Constants.LOG_MARGINAL_LIKELIHOOD_M0: -76546.65811250894,
+        Constants.POSTERIOR_M1: [88519.5, 12540.25, 13002.25],
+        Constants.POSTERIOR_M0: [0.75, 0.125, 0.125],
     }
     # Assert there are no warnings in code exec
     with warnings.catch_warnings(record=True) as w:
@@ -94,34 +95,34 @@ def test_sequential_posteriors():
     # Testing unit-level data, where the counts across all variations are represented as one-hot vectors.
     expected_posteriors_dict = [
         {
-            "log_marginal_likelihood_M1": -1.0986122886681096,
-            "log_marginal_likelihood_M0": -0.916290731874155,
-            "posterior_M1": np.array([2, 1, 1]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -1.0986122886681096,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -0.916290731874155,
+            Constants.POSTERIOR_M1: np.array([2, 1, 1]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -2.4849066497880004,
-            "log_marginal_likelihood_M0": -1.83258146374831,
-            "posterior_M1": np.array([2, 2, 1]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -2.4849066497880004,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -1.83258146374831,
+            Constants.POSTERIOR_M1: np.array([2, 2, 1]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -3.401197381662155,
-            "log_marginal_likelihood_M0": -2.748872195622465,
-            "posterior_M1": np.array([3, 2, 1]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -3.401197381662155,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -2.748872195622465,
+            Constants.POSTERIOR_M1: np.array([3, 2, 1]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -4.499809670330265,
-            "log_marginal_likelihood_M0": -3.66516292749662,
-            "posterior_M1": np.array([3, 3, 1]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -4.499809670330265,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -3.66516292749662,
+            Constants.POSTERIOR_M1: np.array([3, 3, 1]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -6.4457198193855785,
-            "log_marginal_likelihood_M0": -5.27460083993072,
-            "posterior_M1": np.array([3, 3, 2]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -6.4457198193855785,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -5.27460083993072,
+            Constants.POSTERIOR_M1: np.array([3, 3, 2]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
     ]
     datapoints = np.array([[1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
@@ -134,14 +135,18 @@ def test_sequential_posteriors():
     )
     assert len(posteriors_dict) == len(datapoints)
     for acc_dict, expected_acc_dict in zip(posteriors_dict, expected_posteriors_dict):
-        assert acc_dict["log_marginal_likelihood_M1"] == approx(
-            expected_acc_dict["log_marginal_likelihood_M1"]
+        assert acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M1] == approx(
+            expected_acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M1]
         )
-        assert acc_dict["log_marginal_likelihood_M0"] == approx(
-            expected_acc_dict["log_marginal_likelihood_M0"]
+        assert acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M0] == approx(
+            expected_acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M0]
         )
-        assert acc_dict["posterior_M1"] == approx(expected_acc_dict["posterior_M1"])
-        assert acc_dict["posterior_M0"] == approx(expected_acc_dict["posterior_M0"])
+        assert acc_dict[Constants.POSTERIOR_M1] == approx(
+            expected_acc_dict[Constants.POSTERIOR_M1]
+        )
+        assert acc_dict[Constants.POSTERIOR_M0] == approx(
+            expected_acc_dict[Constants.POSTERIOR_M0]
+        )
 
     # Testing time-aggregated data, where each entry represents an aggregate count across all variations for that time.
     datapoints = np.array([[20, 17, 9], [18, 21, 8], [4, 6, 4], [18, 19, 11]])
@@ -154,40 +159,44 @@ def test_sequential_posteriors():
     )
     expected_posteriors_dict = [
         {
-            "log_marginal_likelihood_M1": -7.028201432058012,
-            "log_marginal_likelihood_M0": -4.0776406466061985,
-            "posterior_M1": np.array([21, 18, 10]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -7.028201432058012,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -4.0776406466061985,
+            Constants.POSTERIOR_M1: np.array([21, 18, 10]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -11.947847738358888,
-            "log_marginal_likelihood_M0": -8.265946861099877,
-            "posterior_M1": np.array([39, 39, 18]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -11.947847738358888,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -8.265946861099877,
+            Constants.POSTERIOR_M1: np.array([39, 39, 18]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -15.471401950257842,
-            "log_marginal_likelihood_M0": -11.610743519545139,
-            "posterior_M1": np.array([43, 45, 22]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -15.471401950257842,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -11.610743519545139,
+            Constants.POSTERIOR_M1: np.array([43, 45, 22]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
         {
-            "log_marginal_likelihood_M1": -19.96484521090386,
-            "log_marginal_likelihood_M0": -15.781031228536165,
-            "posterior_M1": np.array([61, 64, 33]),
-            "posterior_M0": np.array([0.4, 0.4, 0.2]),
+            Constants.LOG_MARGINAL_LIKELIHOOD_M1: -19.96484521090386,
+            Constants.LOG_MARGINAL_LIKELIHOOD_M0: -15.781031228536165,
+            Constants.POSTERIOR_M1: np.array([61, 64, 33]),
+            Constants.POSTERIOR_M0: np.array([0.4, 0.4, 0.2]),
         },
     ]
     assert len(posteriors_dict) == len(datapoints)
     for acc_dict, expected_acc_dict in zip(posteriors_dict, expected_posteriors_dict):
-        assert acc_dict["log_marginal_likelihood_M1"] == approx(
-            expected_acc_dict["log_marginal_likelihood_M1"]
+        assert acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M1] == approx(
+            expected_acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M1]
         )
-        assert acc_dict["log_marginal_likelihood_M0"] == approx(
-            expected_acc_dict["log_marginal_likelihood_M0"]
+        assert acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M0] == approx(
+            expected_acc_dict[Constants.LOG_MARGINAL_LIKELIHOOD_M0]
         )
-        assert acc_dict["posterior_M1"] == approx(expected_acc_dict["posterior_M1"])
-        assert acc_dict["posterior_M0"] == approx(expected_acc_dict["posterior_M0"])
+        assert acc_dict[Constants.POSTERIOR_M1] == approx(
+            expected_acc_dict[Constants.POSTERIOR_M1]
+        )
+        assert acc_dict[Constants.POSTERIOR_M0] == approx(
+            expected_acc_dict[Constants.POSTERIOR_M0]
+        )
 
 
 def test_srm_test():
@@ -231,15 +240,15 @@ def test_data_validator():
 
 
 def test_regression():
-    # Set the seed of our random number generator for reproducibility. Don't worry about this
+    # Set the seed of our random number generator for reproducibility. Don't worry about this.
     np.random.seed(0)
-    # Our intended allocation probabilities
+    # Our intended allocation probabilities.
     p_0 = [0.1, 0.5, 0.4]
-    # The actual allocation probabilities
+    # The actual allocation probabilities,
     p = [0.1, 0.49, 0.41]
-    # Specify number of visitors
+    # Specify number of visitors.
     n = 10
-    # Generate allocations
+    # Generate allocations.
     data = multinomial.rvs(1, p, size=n)
     pvals = sequential_p_values(data, p_0)
     post_probs = sequential_posterior_probabilities(data, p_0)

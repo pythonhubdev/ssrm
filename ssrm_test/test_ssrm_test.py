@@ -29,7 +29,6 @@ from .ssrm_test import (
     sequential_p_values,
     sequential_posteriors,
     srm_test,
-    total_n,
 )
 
 
@@ -79,17 +78,6 @@ def test_overflow():
         assert np.isinf(bf)
         assert posterior_probability(bf) == approx(1)
         assert len(w) == 0
-
-
-def test_total_n():
-    posterior = {
-        "log_marginal_likelihood_M1": -23.585991739528254,
-        "log_marginal_likelihood_M0": -76546.65811250894,
-        "posterior_M1": [88519.5, 12540.25, 13002.25],
-        "posterior_M0": [0.75, 0.125, 0.125],
-    }
-    actual = total_n(posterior)
-    assert actual == 114061.0
 
 
 def test_multinomiallogpmf():

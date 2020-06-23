@@ -87,7 +87,7 @@ publish-test: release ## publishes artifacts to Test PyPi.
 
 lint: flake
 
-test: PYTEST_ARGS ?= --color=yes --cov-report term --cov=$(SRC)
+test: PYTEST_ARGS ?= --color=yes --cov-report xml --cov-report term --cov=$(SRC)
 test: ## runs the unit tests.
 	$(RUN) pytest $(PYTEST_ARGS)
 

@@ -19,7 +19,7 @@ import numpy as np
 from scipy.special import gammaln, loggamma, xlogy
 from toolz.itertoolz import accumulate
 
-from .constants import *
+from . import constants as const
 
 
 def update_posterior(n: np.ndarray, alpha: np.ndarray) -> np.ndarray:
@@ -85,34 +85,34 @@ def accumulator(acc: dict, new_data_point: np.ndarray) -> dict:
     dict
         A dictionary storing accumulated values with the same keys as in acc.
     """
-    log_density_M1 = log_posterior_predictive(new_data_point, acc[POSTERIOR_M1])
+    log_density_M1 = log_posterior_predictive(new_data_point, acc[const.POSTERIOR_M1])
     log_density_M0 = multinomiallogpmf(
-        new_data_point, new_data_point.sum(), acc[POSTERIOR_M0]
+        new_data_point, new_data_point.sum(), acc[const.POSTERIOR_M0]
     )
-    log_marginal_likelihood_M1 = acc[LOG_MARGINAL_LIKELIHOOD_M1] + log_density_M1
-    log_marginal_likelihood_M0 = acc[LOG_MARGINAL_LIKELIHOOD_M0] + log_density_M0
+    log_marginal_likelihood_M1 = acc[const.LOG_MARGINAL_LIKELIHOOD_M1] + log_density_M1
+    log_marginal_likelihood_M0 = acc[const.LOG_MARGINAL_LIKELIHOOD_M0] + log_density_M0
     log_bayes_factor = log_marginal_likelihood_M1 - log_marginal_likelihood_M0
 
-    log_posterior_odds = acc[LOG_POSTERIOR_ODDS] + log_density_M1 - log_density_M0
+    log_posterior_odds = acc[const.LOG_POSTERIOR_ODDS] + log_density_M1 - log_density_M0
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         bayes_factor = np.exp(log_bayes_factor)
         posterior_odds = np.exp(log_posterior_odds)
     post_prob = posterior_probability(posterior_odds)
-    p_value = min(1 / bayes_factor, acc[P_VALUE])
+    p_value = min(1 / bayes_factor, acc[const.P_VALUE])
     out = {
-        LOG_POSTERIOR_ODDS: log_posterior_odds,
-        POSTERIOR_ODDS: posterior_odds,
-        LOG_BAYES_FACTOR: log_bayes_factor,
-        BAYES_FACTOR: bayes_factor,
-        P_VALUE: p_value,
-        POSTERIOR_PROBABILITY: post_prob,
-        LOG_MARGINAL_LIKELIHOOD_M1: log_marginal_likelihood_M1,
-        LOG_MARGINAL_LIKELIHOOD_M0: log_marginal_likelihood_M0
+        const.LOG_POSTERIOR_ODDS: log_posterior_odds,
+        const.POSTERIOR_ODDS: posterior_odds,
+        const.LOG_BAYES_FACTOR: log_bayes_factor,
+        const.BAYES_FACTOR: bayes_factor,
+        const.P_VALUE: p_value,
+        const.POSTERIOR_PROBABILITY: post_prob,
+        const.LOG_MARGINAL_LIKELIHOOD_M1: log_marginal_likelihood_M1,
+        const.LOG_MARGINAL_LIKELIHOOD_M0: log_marginal_likelihood_M0
         if new_data_point.sum() > 0
-        else acc[LOG_MARGINAL_LIKELIHOOD_M0],
-        POSTERIOR_M1: acc[POSTERIOR_M1] + new_data_point,
-        POSTERIOR_M0: acc[POSTERIOR_M0],
+        else acc[const.LOG_MARGINAL_LIKELIHOOD_M0],
+        const.POSTERIOR_M1: acc[const.POSTERIOR_M1] + new_data_point,
+        const.POSTERIOR_M0: acc[const.POSTERIOR_M0],
     }
     return out
 
@@ -160,8 +160,8 @@ def bayes_factor(posterior: dict) -> float:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         bf = np.exp(
-            posterior[LOG_MARGINAL_LIKELIHOOD_M1]
-            - posterior[LOG_MARGINAL_LIKELIHOOD_M0]
+            posterior[const.LOG_MARGINAL_LIKELIHOOD_M1]
+            - posterior[const.LOG_MARGINAL_LIKELIHOOD_M0]
         )
     return bf
 
@@ -180,7 +180,7 @@ def total_n(posterior: dict) -> float:
     float
         Total number of datapoints in the posterior.
     """
-    return np.sum(posterior[POSTERIOR_M1] - posterior[POSTERIOR_M0])
+    return np.sum(posterior[const.POSTERIOR_M1] - posterior[const.POSTERIOR_M0])
 
 
 def sequential_bayes_factors(
@@ -215,7 +215,7 @@ def sequential_bayes_factors(
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
-    return [posterior[BAYES_FACTOR] for posterior in posteriors]
+    return [posterior[const.BAYES_FACTOR] for posterior in posteriors]
 
 
 def sequential_posterior_probabilities(
@@ -257,7 +257,7 @@ def sequential_posterior_probabilities(
         dirichlet_concentration,
         prior_odds,
     )
-    return [posterior[POSTERIOR_PROBABILITY] for posterior in posteriors]
+    return [posterior[const.POSTERIOR_PROBABILITY] for posterior in posteriors]
 
 
 def sequential_p_values(
@@ -292,7 +292,7 @@ def sequential_p_values(
     posteriors = sequential_posteriors(
         data, null_probabilities, dirichlet_probability, dirichlet_concentration
     )
-    return [posterior[P_VALUE] for posterior in posteriors]
+    return [posterior[const.P_VALUE] for posterior in posteriors]
 
 
 def sequential_posteriors(
@@ -343,16 +343,16 @@ def sequential_posteriors(
         dirichlet_probability = null_probabilities
     dirichlet_alpha = dirichlet_probability * dirichlet_concentration
     acc = {
-        LOG_POSTERIOR_ODDS: np.log(prior_odds),
-        POSTERIOR_ODDS: prior_odds,
-        LOG_BAYES_FACTOR: 0,
-        BAYES_FACTOR: 1,
-        P_VALUE: 1,
-        POSTERIOR_PROBABILITY: posterior_probability(prior_odds),
-        LOG_MARGINAL_LIKELIHOOD_M1: 0,
-        LOG_MARGINAL_LIKELIHOOD_M0: 0,
-        POSTERIOR_M1: dirichlet_alpha,
-        POSTERIOR_M0: null_probabilities,
+        const.LOG_POSTERIOR_ODDS: np.log(prior_odds),
+        const.POSTERIOR_ODDS: prior_odds,
+        const.LOG_BAYES_FACTOR: 0,
+        const.BAYES_FACTOR: 1,
+        const.P_VALUE: 1,
+        const.POSTERIOR_PROBABILITY: posterior_probability(prior_odds),
+        const.LOG_MARGINAL_LIKELIHOOD_M1: 0,
+        const.LOG_MARGINAL_LIKELIHOOD_M0: 0,
+        const.POSTERIOR_M1: dirichlet_alpha,
+        const.POSTERIOR_M0: null_probabilities,
     }
     return list(accumulate(accumulator, data, acc))[1:]
 

@@ -166,23 +166,6 @@ def bayes_factor(posterior: dict) -> float:
     return bf
 
 
-def total_n(posterior: dict) -> float:
-    """
-    Returns the total number of datapoints in the posterior.
-
-    Parameters
-    ----------
-    posterior : dict
-        Posterior distribution parameters.
-
-    Returns
-    -------
-    float
-        Total number of datapoints in the posterior.
-    """
-    return np.sum(posterior[const.POSTERIOR_M1] - posterior[const.POSTERIOR_M0])
-
-
 def sequential_bayes_factors(
     data: np.ndarray,
     null_probabilities: np.ndarray,

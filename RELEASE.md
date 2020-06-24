@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased - 2020-06-22
+
+### Added
+- Bayes factor, p-value, posterior odds, posterior probability and logged values
+now accumulated in the accumulator.
+
 ## [0.1.4] - 2020-05-27
 
 ### Added

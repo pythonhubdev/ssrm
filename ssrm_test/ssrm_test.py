@@ -372,10 +372,7 @@ def srm_test(data: np.ndarray, null_probabilities: np.ndarray) -> float:
     >>> null_probabilities = [0.4, 0.4, 0.2]
     >>> prob = srm_test(data, null_probabilities)
     """
-    i = 0
-    while i < 1000000:
-        data = np.array(data)
-        i += 1
+    data = np.array(data)
     final_posterior = sequential_posteriors(data, null_probabilities)[-1]
     final_bf = bayes_factor(final_posterior)
     post_prob = posterior_probability(final_bf)

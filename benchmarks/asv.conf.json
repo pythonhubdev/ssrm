@@ -18,6 +18,16 @@
     // of the repository.
     "repo_subdir": "..",
 
+    // List of branches to benchmark. If not provided, defaults to "master"
+    // (for git) or "tip" (for mercurial).
+    "branches": ["HEAD"],
+
+    // The DVCS being used.  If not set, it will be automatically
+    // determined from "repo" by looking at the protocol in the URL
+    // (if remote), or by looking for special directories, such as
+    // ".git" (if local).
+    "dvcs": "git",
+
     // Customizable commands for building, installing, and
     // uninstalling the project. See asv.conf.json documentation.
     //
@@ -28,17 +38,6 @@
         "pip install ssrm-test",
         "poetry build"
     ],
-
-    // List of branches to benchmark. If not provided, defaults to "master"
-    // (for git) or "default" (for mercurial).
-    // "branches": ["master"], // for git
-    // "branches": ["default"],    // for mercurial
-
-    // The DVCS being used.  If not set, it will be automatically
-    // determined from "repo" by looking at the protocol in the URL
-    // (if remote), or by looking for special directories, such as
-    // ".git" (if local).
-    "dvcs": "git",
 
     // The tool to use to create environments.  May be "conda",
     // "virtualenv" or other value depending on the plugins in use.
@@ -133,7 +132,7 @@
     // `asv` will cache results of the recent builds in each
     // environment, making them faster to install next time.  This is
     // the number of builds to keep, per environment.
-    // "build_cache_size": 2,
+    "build_cache_size": 8,
 
     // The commits after which the regression search in `asv publish`
     // should start looking for regressions. Dictionary whose keys are

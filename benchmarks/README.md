@@ -5,13 +5,12 @@ Benchmarking SSRM with Airspeed Velocity.
 
 ### Requirements
 
-Install `airspeed velocity` and `virtualenv`
+Install `airspeed velocity` and `virtualenv`.
 
 Although `asv` ships with support for both `anaconda` and `virtualenv`, this repo will run `asv` inside a virtual environment using `virtualenv`:
 
 ```
-    pip install asv
-    pip install virtualenv
+    make install-dev
 ```
 
 ### Usage
@@ -25,7 +24,7 @@ After making changes to functions in `ssrm_test.py`, commit your change and run 
     asv preview
 ```
 
-More on how to use ``asv`` can be found in [ASV documentation](https://asv.readthedocs.io/)
+More on how to use ``asv`` can be found in [ASV documentation](https://asv.readthedocs.io/).
 
 Command-line help is available as usual via `asv --help` and
 `asv run --help`.

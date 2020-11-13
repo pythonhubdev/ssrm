@@ -3,6 +3,10 @@
 # <img src="logos/ssrm-blue.png" alt="ssrm-logo" width="40"/> SSRM: A Sequential Sample Ratio Mismatch Test
 A package for sequential testing of Sample Ratio Mismatch (SRM).
 
+See the [white paper](https://arxiv.org/abs/2011.03567).
+
+See the [blog post](https://medium.com/engineers-optimizely/a-better-way-to-test-for-sample-ratio-mismatches-srms-and-validate-experiment-implementations-6da7c0d64552).
+
 Contributors:
 - Michael Lindon (michael.s.lindon@gmail.com)
 
